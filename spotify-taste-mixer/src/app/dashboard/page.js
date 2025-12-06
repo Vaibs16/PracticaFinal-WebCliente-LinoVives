@@ -8,6 +8,7 @@ import { generatePlaylist } from "@/lib/spotify";
 // Importamos los componentes
 import ArtistWidget from "@/components/widgets/ArtistWidget";
 import PlaylistDisplay from "@/components/PlaylistDisplay"; 
+import GenreWidget from "@/components/widgets/GenreWidget";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -32,6 +33,11 @@ export default function Dashboard() {
   // Recibe la lista de artistas desde el widget hijo y actualiza el estado de preferencias manteniendo el resto de datos.
   const handleArtistSelection = (selectedArtists) => {
     setPreferences((prev) => ({ ...prev, artists: selectedArtists }));
+  };
+
+  const handleGenreSelection = (selectedGenres) => {
+    setPreferences((prev) => ({ ...prev, genres: selectedGenres 
+    }));
   };
 
   // Activa el estado de carga, llama a la función que conecta con Spotify y guarda las canciones resultantes.
@@ -79,6 +85,7 @@ export default function Dashboard() {
             <h2 className="text-xl font-bold mb-4 text-gray-200">Configura tus gustos</h2>
             <div className="grid grid-cols-1 gap-6">
               <ArtistWidget onSelectionChange={handleArtistSelection} />
+              <GenreWidget onSelectionChange={handleGenreSelection} />
             </div>
           </section>
         </div>
