@@ -40,6 +40,7 @@ export default function Dashboard() {
     try {
       const tracks = await generatePlaylist(preferences);
       setPlaylist(tracks);
+      setIsGenerating(false);
     } catch (error) {
       console.error("Error:", error);
       alert("Error generando la playlist. Verifica tu conexión.");
