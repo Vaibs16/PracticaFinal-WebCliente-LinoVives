@@ -25,6 +25,7 @@ export default function Dashboard() {
 
   const [playlist, setPlaylist] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   // Si el usuario no está autenticado (no tiene token), lo redirige a la página de login.
   useEffect(() => {
@@ -32,6 +33,11 @@ export default function Dashboard() {
       router.push("/");
     }
   }, [router]);
+
+  useEffect(() => {
+    const savedFavs = JSON.parse(localStorage.getItem('favorite_tracks') || '[]');
+    setFavorites(savedFavs);
+  }, []);
 
   // Recibe la lista de artistas desde el widget hijo y actualiza el estado de preferencias manteniendo el resto de datos.
   const handleArtistSelection = (selectedArtists) => {
@@ -62,6 +68,36 @@ export default function Dashboard() {
       ...prev, 
       tracks: selectedTracks 
     }));
+  };
+
+  const handleAddMore = async () => {
+    setIsGenerating(true);
+    try {
+      const newTracks = await generatePlaylist(preferences);
+      // Filtramos para no añadir canciones que ya estén en la lista
+      const uniqueNewTracks = newTracks.filter(
+        newTrack => !playlist.some(existing => existing.id === newTrack.id)
+      );
+      setPlaylist(prev => [...prev, ...uniqueNewTracks]);
+      setIsGenerating(false);
+    } catch (error) {
+      console.error(error);
+      setIsGenerating(false);
+    }
+  }
+
+  const toggleFavorite = (track) => {
+    const isFav = favorites.some(f => f.id === track.id);
+    let newFavs;
+
+    if (isFav) {
+      newFavs = favorites.filter(f => f.id !== track.id);
+    } else {
+      newFavs = [...favorites, track];
+    }
+
+    setFavorites(newFavs);
+    localStorage.setItem('favorite_tracks', JSON.stringify(newFavs));
   };
 
   // Función para eliminar una canción de la lista (se pasa al hijo)
@@ -109,6 +145,9 @@ export default function Dashboard() {
             isGenerating={isGenerating}
             disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0}
             onRemoveTrack={handleRemoveTrack}
+            onToggleFavorite={toggleFavorite}
+            favorites={favorites}
+            onAddMore={handleAddMore}
           />
         </div>
 

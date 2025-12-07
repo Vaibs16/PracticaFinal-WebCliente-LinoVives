@@ -1,6 +1,6 @@
 'use client';
 
-export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack }) {
+export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack, favorites = [], onAddMore, onToggleFavorite }) {
   
   // Función auxiliar para obtener imagen
   const getTrackImage = (track) => {
@@ -19,6 +19,7 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
 
   const buttonClass = `${baseStyle} ${colorStyle}`;
 
+  const isFavorite = (trackId) => favorites.some(f => f.id === trackId);
   return (
     <div className="bg-[#121212] border border-gray-800 rounded-xl p-6 flex flex-col shadow-2xl h-[calc(100vh-140px)]">
       <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-white">
@@ -50,7 +51,15 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
                   {track.artists.map(a => a.name).join(", ")}
                 </p>
               </div>
-              
+              <button
+                  onClick={() => onToggleFavorite(track)}
+                  className={`p-1.5 rounded-full transition-colors ${
+                    isFavorite(track.id) ? 'text-yellow-400' : 'text-gray-600 hover:text-yellow-400'
+                  }`}
+                  title={isFavorite(track.id) ? "Quitar de favoritos" : "Añadir a favoritos"}
+                >
+                  {isFavorite(track.id) ? '★' : '☆'}
+                </button>
               {/* Botón para eliminar canción*/}
               <button 
                 onClick={() => onRemoveTrack(track.id)}
@@ -73,6 +82,15 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
       >
         {isGenerating ? "Generando..." : "GENERAR PLAYLIST"}
       </button>
+      {playlist.length > 0 && (
+          <button
+            onClick={onAddMore}
+            disabled={isGenerating}
+            className="w-full py-2 rounded-full font-semibold text-white border border-gray-600 hover:bg-gray-800 transition-colors text-sm"
+          >
+            + Añadir más canciones
+          </button>
+        )}
     </div>
   );
 }
