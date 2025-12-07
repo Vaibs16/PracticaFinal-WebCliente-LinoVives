@@ -10,6 +10,7 @@ import ArtistWidget from "@/components/widgets/ArtistWidget";
 import PlaylistDisplay from "@/components/PlaylistDisplay"; 
 import GenreWidget from "@/components/widgets/GenreWidget";
 import TrackWidget from "@/components/widgets/TrackWidget";
+import DecadeWidget from "@/components/widgets/DecadeWidget"
 
 export default function Dashboard() {
   const router = useRouter();
@@ -85,6 +86,13 @@ export default function Dashboard() {
       setIsGenerating(false);
     }
   }
+  
+  const handleDecadeSelection = (selectedDecades) => {
+    setPreferences((prev) => ({ 
+      ...prev, 
+      decades: selectedDecades 
+    }));
+  };
 
   const toggleFavorite = (track) => {
     const isFav = favorites.some(f => f.id === track.id);
@@ -133,6 +141,7 @@ export default function Dashboard() {
               <ArtistWidget onSelectionChange={handleArtistSelection} />
               <GenreWidget onSelectionChange={handleGenreSelection} />
               <TrackWidget onSelectionChange={handleTrackSelection} />
+              <DecadeWidget onSelectionChange={handleDecadeSelection} />
             </div>
           </section>
         </div>
@@ -143,7 +152,7 @@ export default function Dashboard() {
             playlist={playlist}
             onGenerate={handleGenerate}
             isGenerating={isGenerating}
-            disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0}
+            disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0 && preferences.decades.length === 0}
             onRemoveTrack={handleRemoveTrack}
             onToggleFavorite={toggleFavorite}
             favorites={favorites}
