@@ -9,6 +9,7 @@ import { generatePlaylist } from "@/lib/spotify";
 import ArtistWidget from "@/components/widgets/ArtistWidget";
 import PlaylistDisplay from "@/components/PlaylistDisplay"; 
 import GenreWidget from "@/components/widgets/GenreWidget";
+import TrackWidget from "@/components/widgets/TrackWidget";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export default function Dashboard() {
   const [preferences, setPreferences] = useState({
     artists: [],
     genres: [], 
+    tracks: [],
+    decades: [],
     limit: 20
   });
 
@@ -53,6 +56,13 @@ export default function Dashboard() {
       setIsGenerating(false);
     }
   };
+  // Seleccionar canciones
+  const handleTrackSelection = (selectedTracks) => {
+    setPreferences((prev) => ({ 
+      ...prev, 
+      tracks: selectedTracks 
+    }));
+  };
 
   // Función para eliminar una canción de la lista (se pasa al hijo)
   const handleRemoveTrack = (trackId) => {
@@ -86,6 +96,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 gap-6">
               <ArtistWidget onSelectionChange={handleArtistSelection} />
               <GenreWidget onSelectionChange={handleGenreSelection} />
+              <TrackWidget onSelectionChange={handleTrackSelection} />
             </div>
           </section>
         </div>

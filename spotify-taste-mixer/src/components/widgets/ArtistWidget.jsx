@@ -7,12 +7,10 @@ export default function ArtistWidget({ onSelectionChange }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [selectedArtists, setSelectedArtists] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Es async para poder usar 'await' y esperar a que la API responda sin bloquear la ejecución
     const searchArtists = async () => {      
-      setLoading(true);
       const token = getAccessToken();
       
       try {

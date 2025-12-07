@@ -1,7 +1,7 @@
 import { getAccessToken } from './auth';
 
 export async function generatePlaylist(preferences) {
-  const { artists, genres, decades = [], popularity } = preferences;
+  const { artists, genres, decades = [], popularity, tracks = [] } = preferences;
   const token = getAccessToken();
   let allTracks = [];
 
@@ -38,6 +38,12 @@ export async function generatePlaylist(preferences) {
         return year >= decadeStart && year < decadeStart + 10;
       });
     });
+  }
+
+  // Añadir canciones seleccionadas manualmente por el usaurio
+
+  if (tracks.length > 0) {
+    allTracks.push(...tracks);
   }
 
   // 4. Filtrar por popularidad

@@ -5,7 +5,7 @@ import { useState } from 'react';
 // Lista de algunos géneros 
 const GENRES = [
   'pop', 'rock', 'hip-hop', 'latin', 'edm', 
-  'indie', 'reggaeton', 'r-n-b', 'k-pop', 
+  'indie', 'reggaeton', 'trap', 'r-n-b', 'k-pop', 
   'metal', 'jazz', 'classical', 'house', 
   'techno', 'punk', 'soul'
 ];
