@@ -107,7 +107,7 @@ export default function Dashboard() {
             playlist={playlist}
             onGenerate={handleGenerate}
             isGenerating={isGenerating}
-            disabled={preferences.artists.length === 0}
+            disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0}
             onRemoveTrack={handleRemoveTrack}
           />
         </div>
