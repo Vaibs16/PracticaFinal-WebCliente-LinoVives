@@ -21,6 +21,9 @@ export default function DecadeWidget({ onSelectionChange }) {
     if (selectedDecades.includes(decadeId)) {
       newSelection = selectedDecades.filter(id => id !== decadeId);
     } else {
+      if (selectedDecades.length >= 3) {
+        return;
+      } 
       newSelection = [...selectedDecades, decadeId];
     }
     
@@ -36,7 +39,7 @@ export default function DecadeWidget({ onSelectionChange }) {
         </h3>
 
           <span className="text-xs font-normal text-gray-400">
-            {selectedDecades.length}/5
+            {selectedDecades.length}/3
           </span>
         
       </div>
