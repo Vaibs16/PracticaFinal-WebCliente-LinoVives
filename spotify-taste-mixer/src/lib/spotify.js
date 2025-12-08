@@ -59,5 +59,8 @@ export async function generatePlaylist(preferences) {
     new Map(allTracks.map(track => [track.id, track])).values()
   ).slice(0, 100);
 
+  // Desordenar resultado de manera random para que no de todo el rato las mismas
+  // Restar 0.5 genera negativos y positivos al azar (50/50), haciendo que el sort baraje la lista.
+  uniqueTracks.sort(() => Math.random() - 0.5);
   return uniqueTracks;
 }
