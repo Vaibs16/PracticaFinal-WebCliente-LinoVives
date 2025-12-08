@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { isAuthenticated, logout } from "@/lib/auth";
 import { generatePlaylist } from "@/lib/spotify";
 
-// Importamos los componentes
+// componentes y widgets
 import ArtistWidget from "@/components/widgets/ArtistWidget";
 import PlaylistDisplay from "@/components/PlaylistDisplay"; 
 import GenreWidget from "@/components/widgets/GenreWidget";
@@ -14,6 +14,7 @@ import DecadeWidget from "@/components/widgets/DecadeWidget"
 import ResetFiltersButton from "@/components/ResetFiltersButton";
 import Header from "@/components/Header";
 import Favorites from "@/components/Favorites";
+import TrackModal from "@/components/TrackModal";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -31,6 +32,7 @@ export default function Dashboard() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [view, setView] = useState('home');
+  const [selectedTrack, setSelectedTrack] = useState(null);
 
   // Si el usuario no está autenticado (no tiene token), lo redirige a la página de login.
   useEffect(() => {
@@ -43,6 +45,16 @@ export default function Dashboard() {
     const savedFavs = JSON.parse(localStorage.getItem('favorite_tracks') || '[]');
     setFavorites(savedFavs);
   }, []);
+
+  // Función para abrir el modal
+  const handleTrackClick = (track) => {
+    setSelectedTrack(track);
+  };
+
+// Función para cerrar el modal
+  const handleCloseModal = () => {
+    setSelectedTrack(null);
+  };
 
   // Para el boton de limpiar filtros
   const handleResetFilter = () => {
@@ -181,6 +193,7 @@ export default function Dashboard() {
             favorites={favorites}
             onAddMore={handleAddMore}
             onClear={handleResetPlaylist} 
+            onTrackClick={handleTrackClick}
           />
         </div>
 
@@ -191,8 +204,13 @@ export default function Dashboard() {
         <Favorites
           favorites={favorites} 
           onToggleFavorite={toggleFavorite} 
+          onTrackClick={handleTrackClick}
         />
       
+      )}
+
+      {selectedTrack && (
+        <TrackModal track={selectedTrack} onClose={handleCloseModal} />
       )}
     </div>
   );

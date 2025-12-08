@@ -2,7 +2,7 @@
 
 import ResetPlaylistButton from "./ResetPlaylistButton";
 
-export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack, favorites = [], onAddMore, onToggleFavorite, onClear}) {
+export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack, favorites = [], onAddMore, onToggleFavorite, onClear, onTrackClick}) {
   
   // Función auxiliar para obtener imagen
   const getTrackImage = (track) => {
@@ -43,7 +43,7 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
           </div>
         ) : (
           playlist.map((track) => (
-            <div key={track.id} className="flex items-center gap-3 p-2 hover:bg-gray-800 rounded-md transition group relative">
+            <div key={track.id} className="flex items-center gap-3 p-2 hover:bg-gray-800 rounded-md transition group relative" onClick={() => onTrackClick(track)}>
               <img 
                 src={getTrackImage(track)} 
                 alt={track.name}

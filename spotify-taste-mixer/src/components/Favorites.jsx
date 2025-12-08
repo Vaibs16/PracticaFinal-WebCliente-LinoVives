@@ -1,6 +1,6 @@
 'use client';
 
-export default function Favorites({ favorites, onToggleFavorite }) {
+export default function Favorites({ favorites, onToggleFavorite, onTrackClick }) {
   
   // Si no hay favoritos aviso 
   if (!favorites || favorites.length === 0) {
@@ -30,6 +30,7 @@ export default function Favorites({ favorites, onToggleFavorite }) {
           <div 
             key={track.id} 
             className="group bg-[#181818] hover:bg-[#282828] p-4 rounded-xl transition-all border border-transparent hover:border-gray-700 flex items-center gap-4 relative"
+            onClick={() => onTrackClick(track)}
           >
             {/*Imagen */}
             <div className="w-16 h-16 shrink-0 shadow-lg">
@@ -52,7 +53,10 @@ export default function Favorites({ favorites, onToggleFavorite }) {
 
             {/*Quitar favoritos*/}
             <button
-              onClick={() => onToggleFavorite(track)}
+              onClick={(e) => {
+                onToggleFavorite(track)
+                e.stopPropagation()
+              }}
               className="text-yellow-500 hover:text-red-500 p-2"
               title="Quitar de favoritos"
             >
