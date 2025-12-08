@@ -12,7 +12,8 @@ import GenreWidget from "@/components/widgets/GenreWidget";
 import TrackWidget from "@/components/widgets/TrackWidget";
 import DecadeWidget from "@/components/widgets/DecadeWidget"
 import ResetFiltersButton from "@/components/ResetFiltersButton";
-import ResetPlaylistButton from "@/components/ResetPlaylistButton";
+import Header from "@/components/Header";
+import Favorites from "@/components/Favorites";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function Dashboard() {
   const [playlist, setPlaylist] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [favorites, setFavorites] = useState([]);
+  const [view, setView] = useState('home');
 
   // Si el usuario no está autenticado (no tiene token), lo redirige a la página de login.
   useEffect(() => {
@@ -140,16 +142,9 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6 font-sans">
-      
-      <header className="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Spotify <span className="text-[#1DB954]">Mixer</span>
-        </h1>
-        <button onClick={handleLogout} className="text-sm text-gray-400 hover:text-white transition-colors">
-          Cerrar Sesión
-        </button>
-      </header>
+      <Header view={view} setView={setView} favoritesCount={favorites.length} onLogout={handleLogout} />
 
+      {view === "home" ? (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Widgets*/}
@@ -190,6 +185,15 @@ export default function Dashboard() {
         </div>
 
       </div>
+
+      ) : (
+
+        <Favorites
+          favorites={favorites} 
+          onToggleFavorite={toggleFavorite} 
+        />
+      
+      )}
     </div>
   );
 }
