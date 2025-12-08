@@ -69,7 +69,10 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
                 </button>
               {/* Botón para eliminar canción*/}
               <button 
-                onClick={() => onRemoveTrack(track.id)}
+                onClick={(e) => {
+                  onRemoveTrack(track.id)
+                  e.stopPropagation()
+                }}
                 className="text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity px-2"
                 title="Eliminar canción"
               >
