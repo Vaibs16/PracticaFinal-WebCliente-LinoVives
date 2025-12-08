@@ -56,7 +56,10 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
                 </p>
               </div>
               <button
-                  onClick={() => onToggleFavorite(track)}
+                  onClick={(e) => {
+                    onToggleFavorite(track)
+                    e.stopPropagation()
+                  }}
                   className={`p-1.5 rounded-full transition-colors ${
                     isFavorite(track.id) ? 'text-yellow-400' : 'text-gray-600 hover:text-yellow-400'
                   }`}
