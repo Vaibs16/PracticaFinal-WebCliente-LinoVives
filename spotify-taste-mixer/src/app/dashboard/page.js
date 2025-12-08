@@ -11,6 +11,8 @@ import PlaylistDisplay from "@/components/PlaylistDisplay";
 import GenreWidget from "@/components/widgets/GenreWidget";
 import TrackWidget from "@/components/widgets/TrackWidget";
 import DecadeWidget from "@/components/widgets/DecadeWidget"
+import ResetFiltersButton from "@/components/ResetFiltersButton";
+import ResetPlaylistButton from "@/components/ResetPlaylistButton";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -23,7 +25,7 @@ export default function Dashboard() {
     decades: [],
     limit: 20
   });
-
+  const [resetKey, setResetKey] = useState(0);
   const [playlist, setPlaylist] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [favorites, setFavorites] = useState([]);
@@ -39,6 +41,23 @@ export default function Dashboard() {
     const savedFavs = JSON.parse(localStorage.getItem('favorite_tracks') || '[]');
     setFavorites(savedFavs);
   }, []);
+
+  // Para el boton de limpiar filtros
+  const handleResetFilter = () => {
+    setPreferences({
+      artists: [],
+      genres: [], 
+      tracks: [],
+      decades: [],
+      limit: 20
+    });
+    setResetKey(prev => prev + 1); 
+  };
+
+  // Para el boton de limpial playlist
+  const handleResetPlaylist = () => {
+    setPlaylist([]);
+  }
 
   // Recibe la lista de artistas desde el widget hijo y actualiza el estado de preferencias manteniendo el resto de datos.
   const handleArtistSelection = (selectedArtists) => {
@@ -133,15 +152,24 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Widgets */}
+        {/* Widgets*/}
         <div className="lg:col-span-2 space-y-6">
           <section>
-            <h2 className="text-xl font-bold mb-4 text-gray-200">Configura tus gustos</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-200">Configura tus gustos</h2>
+              {/* Botón Borrar Filtros */}
+              <ResetFiltersButton onReset={handleResetFilter} />
+            </div>
+
             <div className="grid grid-cols-1 gap-6">
-              <ArtistWidget onSelectionChange={handleArtistSelection} />
-              <GenreWidget onSelectionChange={handleGenreSelection} />
-              <TrackWidget onSelectionChange={handleTrackSelection} />
-              <DecadeWidget onSelectionChange={handleDecadeSelection} />
+              {/* Uso la prop key con resetKey. 
+              Cuando resetKey cambia, React detecta que es un componente distinto, 
+              destruye el viejo y crea uno nuevo limpio (borrando los botones verdes).
+              */}
+              <ArtistWidget key={`artist-${resetKey}`} onSelectionChange={handleArtistSelection} />
+              <GenreWidget key={`genre-${resetKey}`} onSelectionChange={handleGenreSelection} />
+              <TrackWidget key={`track-${resetKey}`} onSelectionChange={handleTrackSelection} />
+              <DecadeWidget key={`decade-${resetKey}`} onSelectionChange={handleDecadeSelection} />
             </div>
           </section>
         </div>
@@ -157,6 +185,7 @@ export default function Dashboard() {
             onToggleFavorite={toggleFavorite}
             favorites={favorites}
             onAddMore={handleAddMore}
+            onClear={handleResetPlaylist} 
           />
         </div>
 

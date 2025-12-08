@@ -1,6 +1,8 @@
 'use client';
 
-export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack, favorites = [], onAddMore, onToggleFavorite }) {
+import ResetPlaylistButton from "./ResetPlaylistButton";
+
+export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack, favorites = [], onAddMore, onToggleFavorite, onClear}) {
   
   // Función auxiliar para obtener imagen
   const getTrackImage = (track) => {
@@ -22,14 +24,16 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
   const isFavorite = (trackId) => favorites.some(f => f.id === trackId);
   return (
     <div className="bg-[#121212] border border-gray-800 rounded-xl p-6 flex flex-col shadow-2xl h-[calc(100vh-140px)]">
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-white">
-        Playlist Generada
-        {playlist.length > 0 && (
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold flex items-center gap-2 text-white">
+          Playlist Generada
           <span className="text-xs bg-gray-700 px-2 py-1 rounded-full text-gray-300">
             {playlist.length}
           </span>
-        )}
-      </h2>
+        </h2>
+        <ResetPlaylistButton onReset={onClear} />
+        
+      </div>
 
       {/* Lista de canciones con scroll */}
       <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 custom-scrollbar">

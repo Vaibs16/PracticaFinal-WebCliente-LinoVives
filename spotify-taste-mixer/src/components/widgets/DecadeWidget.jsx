@@ -63,9 +63,7 @@ export default function DecadeWidget({ onSelectionChange }) {
           );
         })}
       </div>
-      <p className="text-xs text-gray-500 mt-3 text-center">
-        Filtra los resultados por fecha de lanzamiento
-      </p>
+
     </div>
   );
 }
