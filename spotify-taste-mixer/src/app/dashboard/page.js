@@ -16,6 +16,7 @@ import Header from "@/components/Header";
 import Favorites from "@/components/Favorites";
 import TrackModal from "@/components/TrackModal";
 import MoodWidget from "@/components/widgets/MoodWidget";
+import PopularityWidget from "@/components/widgets/PopularityWidget";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -161,6 +162,10 @@ export default function Dashboard() {
     setPlaylist((a) => a.filter(track => track.id !== trackId));
   };
 
+  const handlePopularitySelection = (range) => {
+    setPreferences((prev) => ({ ...prev, popularity: range }));
+  };
+
   // Cerrar sesion
   const handleLogout = () => {
     logout();
@@ -195,7 +200,8 @@ export default function Dashboard() {
                 <GenreWidget key={`genre-${resetKey}`} onSelectionChange={handleGenreSelection} />
                 <TrackWidget key={`track-${resetKey}`} onSelectionChange={handleTrackSelection} />
                 <DecadeWidget key={`decade-${resetKey}`} onSelectionChange={handleDecadeSelection} />
-                <MoodWidget key={`mood-${resetKey}`} onMoodChange={handleMoodChange} />
+                <MoodWidget key={`mood-${resetKey}`} onSelectionChange={handleMoodChange} />
+                <PopularityWidget key={`popularity-${resetKey}`} onSelectionChange={handlePopularitySelection} />
               </div>
             </section>
           </div>

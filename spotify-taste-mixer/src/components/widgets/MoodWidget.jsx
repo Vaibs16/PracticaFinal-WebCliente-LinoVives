@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function MoodWidget({ onMoodChange }) {
+export default function MoodWidget({ onSelectionChange }) {
 
   const DEFAULTS = {
     energy: 50,
@@ -38,20 +38,20 @@ export default function MoodWidget({ onMoodChange }) {
     const newFeatures = { ...features, [key]: parseInt(value) };
     setFeatures(newFeatures);
     setActivePreset(null);
-    onMoodChange(newFeatures);
+    onSelectionChange(newFeatures);
   };
 
   const applyPreset = (presetKey) => {
     const values = PRESETS[presetKey].values;
     setFeatures(values);
     setActivePreset(presetKey);
-    onMoodChange(values);
+    onSelectionChange(values);
   };
 
   const handleReset = () => {
     setFeatures(DEFAULTS); 
     setActivePreset(null); 
-    onMoodChange(DEFAULTS); 
+    onSelectionChange(DEFAULTS); 
   };
 
   // Configuración de las etiquetas de los 4 sliders
