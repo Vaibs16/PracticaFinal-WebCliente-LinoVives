@@ -19,9 +19,9 @@ export default function Favorites({ favorites, onToggleFavorite, onTrackClick })
       
       <div className="flex items-center gap-3 pb-6">
         <h2 className="text-2xl font-bold text-white">Tu Colección</h2>
-        <span className="bg-[#1DB954] text-black text-xs font-bold p-2 rounded-full">
+        <p className="bg-[#1DB954] text-black text-xs font-bold p-2 rounded-full">
           {favorites.length} canciones
-        </span>
+        </p>
       </div>
 
       {/*canciones*/}

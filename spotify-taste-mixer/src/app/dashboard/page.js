@@ -15,6 +15,7 @@ import ResetFiltersButton from "@/components/ResetFiltersButton";
 import Header from "@/components/Header";
 import Favorites from "@/components/Favorites";
 import TrackModal from "@/components/TrackModal";
+import MoodWidget from "@/components/widgets/MoodWidget";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function Dashboard() {
     genres: [], 
     tracks: [],
     decades: [],
+    audioFeatures: null,
     limit: 20
   });
   const [resetKey, setResetKey] = useState(0);
@@ -63,6 +65,7 @@ export default function Dashboard() {
       genres: [], 
       tracks: [],
       decades: [],
+      audioFeatures: null,
       limit: 20
     });
     setResetKey(prev => prev + 1); 
@@ -80,6 +83,18 @@ export default function Dashboard() {
 
   const handleGenreSelection = (selectedGenres) => {
     setPreferences((prev) => ({ ...prev, genres: selectedGenres 
+    }));
+  };
+
+  const handleMoodChange = (features) => {
+      const featuresFinal = {
+      target_energy: features.energy,           
+      target_valence: features.valence,         
+      target_danceability: features.danceability, 
+      target_acousticness: features.acousticness}
+    setPreferences((prev) => ({ 
+      ...prev, 
+      audioFeatures: featuresFinal 
     }));
   };
 
@@ -177,6 +192,7 @@ export default function Dashboard() {
               <GenreWidget key={`genre-${resetKey}`} onSelectionChange={handleGenreSelection} />
               <TrackWidget key={`track-${resetKey}`} onSelectionChange={handleTrackSelection} />
               <DecadeWidget key={`decade-${resetKey}`} onSelectionChange={handleDecadeSelection} />
+              <MoodWidget key={`mood-${resetKey}`} onMoodChange={handleMoodChange} />
             </div>
           </section>
         </div>
@@ -187,7 +203,7 @@ export default function Dashboard() {
             playlist={playlist}
             onGenerate={handleGenerate}
             isGenerating={isGenerating}
-            disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0 && preferences.decades.length === 0}
+            disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0 && preferences.decades.length === 0 && !preferences.audioFeatures}
             onRemoveTrack={handleRemoveTrack}
             onToggleFavorite={toggleFavorite}
             favorites={favorites}

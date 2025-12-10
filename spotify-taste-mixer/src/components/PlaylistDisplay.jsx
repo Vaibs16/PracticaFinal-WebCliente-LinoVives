@@ -27,9 +27,9 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold flex items-center gap-2 text-white">
           Playlist Generada
-          <span className="text-xs bg-gray-700 px-2 py-1 rounded-full text-gray-300">
+          <p className="text-xs bg-gray-700 px-2 py-1 rounded-full text-gray-300">
             {playlist.length}
-          </span>
+          </p>
         </h2>
         <ResetPlaylistButton onReset={onClear} />
         

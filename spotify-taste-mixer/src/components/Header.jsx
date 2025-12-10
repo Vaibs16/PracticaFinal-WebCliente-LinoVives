@@ -33,9 +33,9 @@ export default function Header({ view, setView, favoritesCount, onLogout }) {
         >
           Favoritos
           {favoritesCount > 0 && (
-            <span className="text-xs bg-black/30 px-2 rounded-full">
+            <p className="text-xs bg-black/30 px-2 rounded-full">
               {favoritesCount}
-            </span>
+            </p>
           )}
         </button>
       </nav>
