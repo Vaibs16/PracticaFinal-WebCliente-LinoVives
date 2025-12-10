@@ -3,14 +3,15 @@
 import { useState } from 'react';
 
 export default function MoodWidget({ onMoodChange }) {
-  // Estado con los 4 parámetros obligatorios
-  const [features, setFeatures] = useState({
-    energy: 50,       // Energía
-    valence: 50,      // Felicidad/Tristeza
-    danceability: 50, // Ganas de bailar
-    acousticness: 50, // Sonido orgánico vs electrónico
-  });
 
+  const DEFAULTS = {
+    energy: 50,
+    valence: 50,
+    danceability: 50,
+    acousticness: 50,
+  };
+
+  const [features, setFeatures] = useState(DEFAULTS); 
   const [activePreset, setActivePreset] = useState(null);
 
   // Presets configurados
@@ -47,6 +48,12 @@ export default function MoodWidget({ onMoodChange }) {
     onMoodChange(values);
   };
 
+  const handleReset = () => {
+    setFeatures(DEFAULTS); 
+    setActivePreset(null); 
+    onMoodChange(DEFAULTS); 
+  };
+
   // Configuración de las etiquetas de los 4 sliders
   const sliders = [
     { key: 'energy', label: 'Energía', min: 'Relax', max: 'Potente' },
@@ -58,14 +65,27 @@ export default function MoodWidget({ onMoodChange }) {
   return (
     <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow-lg">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-bold text-white flex items-center gap-2">
+        
+        <h3 className="text-xl font-bold text-white">
           Mood
         </h3>
-        {activePreset && (
-          <p className="text-xs bg-[#1DB954] text-black font-bold px-2 py-1 rounded-full">
-            {PRESETS[activePreset].label}
-          </p>
-        )}
+
+        <div className="flex items-center gap-3">
+          
+          <button 
+            onClick={handleReset}
+            className="text-xs text-gray-400 hover:text-white border border-gray-600 hover:border-white px-3 py-1 rounded transition-colors"
+            title="Volver a valores neutros"
+          >
+            Reset
+          </button>
+
+          {activePreset && (
+            <p className="text-xs bg-[#1DB954] text-black font-bold px-3 py-1 rounded-full ">
+              {PRESETS[activePreset].label}
+            </p>
+          )}
+        </div>
       </div>
 
       {/*Uso Object.keys para obtener solo la lista: ['Happy', 'Sad', 'Energetic'...] */}

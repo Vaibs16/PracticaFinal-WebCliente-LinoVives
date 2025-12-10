@@ -103,10 +103,10 @@ export default function TrackWidget({ onSelectionChange }) {
                 className="w-10 h-10 rounded object-cover"
               />
               <div className="flex flex-col">
-                <span className="text-white text-sm font-medium">{track.name}</span>
-                <span className="text-gray-400 text-xs">
+                <p className="text-white text-sm font-medium">{track.name}</p>
+                <p className="text-gray-400 text-xs">
                   {track.artists && track.artists[0].name}
-                </span>
+                </p>
               </div>
             </div>
           ))}
@@ -116,7 +116,7 @@ export default function TrackWidget({ onSelectionChange }) {
       {/* Canciones Seleccionadas */}
       <div className="flex flex-wrap gap-2">
         {selectedTracks.map(track => (
-          <span 
+          <p 
             key={track.id} 
             className="bg-green-500 text-black font-semibold text-xs px-3 py-1 rounded-full flex items-center gap-2"
           >
@@ -127,7 +127,7 @@ export default function TrackWidget({ onSelectionChange }) {
             >
               ×
             </button>
-          </span>
+          </p>
         ))}
       </div>
     </div>

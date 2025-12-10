@@ -72,9 +72,9 @@ export default function ArtistWidget({ onSelectionChange }) {
     <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow-lg">
       <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
         Artistas
-        <span className="text-xs font-normal text-gray-400 ml-auto">
+        <p className="text-xs font-normal text-gray-400 ml-auto">
           {selectedArtists.length}/5
-        </span>
+        </p>
       </h3>
       
       {/* Buscador */}
@@ -103,7 +103,7 @@ export default function ArtistWidget({ onSelectionChange }) {
                 alt={artist.name} 
                 className="w-10 h-10 rounded-full object-cover"
               />
-              <span className="text-white text-sm">{artist.name}</span>
+              <p className="text-white text-sm">{artist.name}</p>
             </div>
           ))}
         </div>
@@ -112,7 +112,7 @@ export default function ArtistWidget({ onSelectionChange }) {
       {/* Artistas Seleccionados */}
       <div className="flex flex-wrap gap-2">
         {selectedArtists.map(artist => (
-          <span 
+          <p 
             key={artist.id} 
             className="bg-[#1DB954] text-black font-semibold text-xs px-3 py-1 rounded-full flex items-center gap-2"
           >
@@ -123,7 +123,7 @@ export default function ArtistWidget({ onSelectionChange }) {
             >
               ×
             </button>
-          </span>
+          </p>
         ))}
       </div>
     </div>
