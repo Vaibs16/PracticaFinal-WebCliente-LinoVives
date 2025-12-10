@@ -36,9 +36,9 @@ export default function GenreWidget({ onSelectionChange }) {
         <h3 className="text-xl font-bold text-white flex items-center gap-2">
           Géneros
         </h3>
-        <span className="text-xs font-normal text-gray-400">
+        <p className="text-xs font-normal text-gray-400">
           {selectedGenres.length}/3
-        </span>
+        </p>
       </div>
       
       <div className="flex flex-wrap gap-2">

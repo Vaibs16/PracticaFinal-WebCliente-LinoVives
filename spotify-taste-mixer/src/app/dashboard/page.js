@@ -17,6 +17,7 @@ import Favorites from "@/components/Favorites";
 import TrackModal from "@/components/TrackModal";
 import MoodWidget from "@/components/widgets/MoodWidget";
 import PopularityWidget from "@/components/widgets/PopularityWidget";
+import MyPlaylists from "@/components/MyPlaylists";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function Dashboard() {
     tracks: [],
     decades: [],
     audioFeatures: null,
+    popularity: null,
     limit: 20
   });
   const [resetKey, setResetKey] = useState(0);
@@ -36,6 +38,7 @@ export default function Dashboard() {
   const [favorites, setFavorites] = useState([]);
   const [view, setView] = useState('home');
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [savedPlaylists, setSavedPlaylists] = useState([]);
 
   // Si el usuario no está autenticado (no tiene token), lo redirige a la página de login.
   useEffect(() => {
@@ -45,10 +48,12 @@ export default function Dashboard() {
   }, [router]);
 
   useEffect(() => {
-    const savedFavs = JSON.parse(localStorage.getItem('favorite_tracks') || '[]');
-    setFavorites(savedFavs);
-  }, []);
+      const savedFavs = JSON.parse(localStorage.getItem('favorite_tracks') || '[]');
+      setFavorites(savedFavs);
 
+      const loadedPlaylists = JSON.parse(localStorage.getItem('my_playlists') || '[]');
+      setSavedPlaylists(loadedPlaylists);
+    }, []);
   // Función para abrir el modal
   const handleTrackClick = (track) => {
     setSelectedTrack(track);
@@ -67,6 +72,7 @@ export default function Dashboard() {
       tracks: [],
       decades: [],
       audioFeatures: null,
+      popularity: null,
       limit: 20
     });
     setResetKey(prev => prev + 1); 
@@ -166,78 +172,110 @@ export default function Dashboard() {
     setPreferences((prev) => ({ ...prev, popularity: range }));
   };
 
+  const handleSavePlaylist = () => {
+    
+    const name = window.prompt("¿Qué nombre quieres ponerle a tu playlist?", `Mi Playlist #${savedPlaylists.length + 1}`);
+    
+    if (name) {
+      const newPlaylist = {
+        id: Date.now(),
+        name: name,
+        date: new Date().toISOString(),
+        tracks: playlist
+      };
+
+      const updatedList = [newPlaylist, ...savedPlaylists];
+      setSavedPlaylists(updatedList);
+      localStorage.setItem('my_playlists', JSON.stringify(updatedList));
+      alert("¡Playlist guardada en 'Mis Playlists'!");
+    }
+  };
+
+  const handleDeletePlaylist = (id) => {
+    if (confirm("¿Seguro que quieres borrar esta playlist?")) {
+      const updatedList = savedPlaylists.filter(p => p.id !== id);
+      setSavedPlaylists(updatedList);
+      localStorage.setItem('my_playlists', JSON.stringify(updatedList));
+    }
+  };
   // Cerrar sesion
   const handleLogout = () => {
     logout();
     router.push("/");
   };
 
-  return (
-    <div className="h-screen bg-black text-white p-6 font-sans overflow-hidden flex flex-col">
-      <div className="p-6 pb-0 flex-none">
-        <Header view={view} setView={setView} favoritesCount={favorites.length} onLogout={handleLogout} />
-      </div>
-
-      {view === "home" ? (
-      <div className="flex-1 min-h-0 p-6 pt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
-          
-          {/* Widgets*/}
-          <div className="lg:col-span-2 h-full overflow-y-auto pr-2 custom-scrollbar">
-            <section>
-              <div className="flex justify-between items-center mb-4 sticky top-0 bg-black z-10 py-3">
-                <h2 className="text-xl font-bold text-gray-200 sticky">Configura tus gustos</h2>
-                {/* Botón borrar filtros */}
-                <ResetFiltersButton onReset={handleResetFilter} />
-              </div>
-
-              <div className="grid grid-cols-1 gap-6">
-                {/* Uso la prop key con resetKey. 
-                Cuando resetKey cambia, React detecta que es un componente distinto, 
-                destruye el viejo y crea uno nuevo limpio (borrando los botones verdes).
-                */}
-                <ArtistWidget key={`artist-${resetKey}`} onSelectionChange={handleArtistSelection} />
-                <GenreWidget key={`genre-${resetKey}`} onSelectionChange={handleGenreSelection} />
-                <TrackWidget key={`track-${resetKey}`} onSelectionChange={handleTrackSelection} />
-                <DecadeWidget key={`decade-${resetKey}`} onSelectionChange={handleDecadeSelection} />
-                <MoodWidget key={`mood-${resetKey}`} onSelectionChange={handleMoodChange} />
-                <PopularityWidget key={`popularity-${resetKey}`} onSelectionChange={handlePopularitySelection} />
-              </div>
-            </section>
-          </div>
-
-          {/* Playlist Generada */}
-          <div className="h-full overflow-hidden">
-            <PlaylistDisplay 
-              playlist={playlist}
-              onGenerate={handleGenerate}
-              isGenerating={isGenerating}
-              disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0 && preferences.decades.length === 0 && !preferences.audioFeatures}
-              onRemoveTrack={handleRemoveTrack}
-              onToggleFavorite={toggleFavorite}
-              favorites={favorites}
-              onAddMore={handleAddMore}
-              onClear={handleResetPlaylist} 
-              onTrackClick={handleTrackClick}
-            />
+const webContent = () => { 
+    if (view === 'home') {
+      return (
+        <div className="flex-1 min-h-0 p-6 pt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+            <div className="lg:col-span-2 h-full overflow-y-auto pr-2 custom-scrollbar">
+              <section>
+                <div className="flex justify-between items-center mb-4 sticky top-0 bg-black z-10 py-3">
+                  <h2 className="text-xl font-bold text-gray-200">Configura tus gustos</h2>
+                  <ResetFiltersButton onReset={handleResetFilter} />
+                </div>
+                <div className="grid grid-cols-1 gap-6 pb-10">
+                  <ArtistWidget key={`artist-${resetKey}`} onSelectionChange={handleArtistSelection} />
+                  <GenreWidget key={`genre-${resetKey}`} onSelectionChange={handleGenreSelection} />
+                  <TrackWidget key={`track-${resetKey}`} onSelectionChange={handleTrackSelection} />
+                  <DecadeWidget key={`decade-${resetKey}`} onSelectionChange={handleDecadeSelection} />
+                  <MoodWidget key={`mood-${resetKey}`} onMoodChange={handleMoodChange} />
+                  <PopularityWidget key={`popularity-${resetKey}`} onSelectionChange={handlePopularitySelection} />
+                </div>
+              </section>
+            </div>
+            <div className="h-full overflow-hidden">
+              <PlaylistDisplay 
+                playlist={playlist}
+                onGenerate={handleGenerate}
+                isGenerating={isGenerating}
+                disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0 && preferences.decades.length === 0 && !preferences.audioFeatures && !preferences.popularity}
+                onRemoveTrack={handleRemoveTrack}
+                onToggleFavorite={toggleFavorite}
+                favorites={favorites}
+                onAddMore={handleAddMore}
+                onClear={handleResetPlaylist} 
+                onTrackClick={handleTrackClick}
+                onSave={handleSavePlaylist} 
+              />
+            </div>
           </div>
         </div>
+      );
+    } 
+    
+    if (view === 'favorites') {
+      return (
+        <div className="flex-1 overflow-y-auto p-6">
+          <Favorites 
+            favorites={favorites} 
+            onToggleFavorite={toggleFavorite} 
+            onTrackClick={handleTrackClick}
+          />
+        </div>
+      );
+    }
+    if (view === 'playlists') {
+      return (
+        <div className="flex-1 overflow-y-auto p-6">
+          <MyPlaylists 
+            savedPlaylists={savedPlaylists}
+            onDelete={handleDeletePlaylist}
+            onTrackClick={handleTrackClick}
+          />
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="h-screen bg-black text-white font-sans flex flex-col overflow-hidden">
+      <div className="flex-none p-6 pb-0">
+        <Header view={view} setView={setView} favoritesCount={favorites.length} onLogout={handleLogout} />
       </div>
-
-      ) : (
-
-        <Favorites 
-          className="flex-1 overflow-y-auto p-6"
-          favorites={favorites} 
-          onToggleFavorite={toggleFavorite} 
-          onTrackClick={handleTrackClick}
-        />
-      
-      )}
-
-      {selectedTrack && (
-        <TrackModal track={selectedTrack} onClose={handleCloseModal} />
-      )}
+      {webContent()}
+      {selectedTrack && <TrackModal track={selectedTrack} onClose={handleCloseModal} />}
     </div>
   );
 }

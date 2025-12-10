@@ -38,6 +38,18 @@ export default function Header({ view, setView, favoritesCount, onLogout }) {
             </p>
           )}
         </button>
+        
+        {/*Botón mis playlist*/}
+        <button
+          onClick={() => setView('playlists')}
+          className={`px-6 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
+            view === 'playlists' 
+              ? 'bg-[#1DB954] text-black shadow-lg' 
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          Mis Playlists
+        </button>
       </nav>
 
       {/*Cerrar sesion */}

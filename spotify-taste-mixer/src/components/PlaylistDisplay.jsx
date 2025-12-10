@@ -2,7 +2,7 @@
 
 import ResetPlaylistButton from "./ResetPlaylistButton";
 
-export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack, favorites = [], onAddMore, onToggleFavorite, onClear, onTrackClick}) {
+export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, disabled, onRemoveTrack, favorites = [], onAddMore, onToggleFavorite, onClear, onTrackClick, onSave}) {
   
   // Función auxiliar para obtener imagen
   const getTrackImage = (track) => {
@@ -34,6 +34,15 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
         <ResetPlaylistButton onReset={onClear} />
         
       </div>
+        {playlist.length > 0 && (
+          <button
+            onClick={onSave}
+            className={buttonClass}
+            title="Guardar en Mis Playlists"
+          >
+            Guardar
+          </button>
+        )}
 
       {/* Lista de canciones con scroll */}
       <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 custom-scrollbar">
