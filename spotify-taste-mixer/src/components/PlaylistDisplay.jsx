@@ -23,7 +23,7 @@ export default function PlaylistDisplay({ playlist, onGenerate, isGenerating, di
 
   const isFavorite = (trackId) => favorites.some(f => f.id === trackId);
   return (
-    <div className="bg-[#121212] border border-gray-800 rounded-xl p-6 flex flex-col shadow-2xl h-[calc(100vh-140px)]">
+    <div className="bg-[#121212] border border-gray-800 rounded-xl p-6 flex flex-col shadow-2xl h-[calc(100vh-210px)]">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold flex items-center gap-2 text-white">
           Playlist Generada

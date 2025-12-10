@@ -19,3 +19,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;   
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;          
+  scrollbar-color: #333 #000;    
+}

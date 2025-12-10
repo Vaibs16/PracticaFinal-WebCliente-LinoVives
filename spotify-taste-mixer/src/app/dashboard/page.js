@@ -168,56 +168,60 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 font-sans">
-      <Header view={view} setView={setView} favoritesCount={favorites.length} onLogout={handleLogout} />
+    <div className="h-screen bg-black text-white p-6 font-sans overflow-hidden flex flex-col">
+      <div className="p-6 pb-0 flex-none">
+        <Header view={view} setView={setView} favoritesCount={favorites.length} onLogout={handleLogout} />
+      </div>
 
       {view === "home" ? (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Widgets*/}
-        <div className="lg:col-span-2 space-y-6">
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-200">Configura tus gustos</h2>
-              {/* Botón Borrar Filtros */}
-              <ResetFiltersButton onReset={handleResetFilter} />
-            </div>
+      <div className="flex-1 min-h-0 p-6 pt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+          
+          {/* Widgets*/}
+          <div className="lg:col-span-2 h-full overflow-y-auto pr-2 custom-scrollbar">
+            <section>
+              <div className="flex justify-between items-center mb-4 sticky top-0 bg-black z-10 py-3">
+                <h2 className="text-xl font-bold text-gray-200 sticky">Configura tus gustos</h2>
+                {/* Botón borrar filtros */}
+                <ResetFiltersButton onReset={handleResetFilter} />
+              </div>
 
-            <div className="grid grid-cols-1 gap-6">
-              {/* Uso la prop key con resetKey. 
-              Cuando resetKey cambia, React detecta que es un componente distinto, 
-              destruye el viejo y crea uno nuevo limpio (borrando los botones verdes).
-              */}
-              <ArtistWidget key={`artist-${resetKey}`} onSelectionChange={handleArtistSelection} />
-              <GenreWidget key={`genre-${resetKey}`} onSelectionChange={handleGenreSelection} />
-              <TrackWidget key={`track-${resetKey}`} onSelectionChange={handleTrackSelection} />
-              <DecadeWidget key={`decade-${resetKey}`} onSelectionChange={handleDecadeSelection} />
-              <MoodWidget key={`mood-${resetKey}`} onMoodChange={handleMoodChange} />
-            </div>
-          </section>
+              <div className="grid grid-cols-1 gap-6">
+                {/* Uso la prop key con resetKey. 
+                Cuando resetKey cambia, React detecta que es un componente distinto, 
+                destruye el viejo y crea uno nuevo limpio (borrando los botones verdes).
+                */}
+                <ArtistWidget key={`artist-${resetKey}`} onSelectionChange={handleArtistSelection} />
+                <GenreWidget key={`genre-${resetKey}`} onSelectionChange={handleGenreSelection} />
+                <TrackWidget key={`track-${resetKey}`} onSelectionChange={handleTrackSelection} />
+                <DecadeWidget key={`decade-${resetKey}`} onSelectionChange={handleDecadeSelection} />
+                <MoodWidget key={`mood-${resetKey}`} onMoodChange={handleMoodChange} />
+              </div>
+            </section>
+          </div>
+
+          {/* Playlist Generada */}
+          <div className="h-full overflow-hidden">
+            <PlaylistDisplay 
+              playlist={playlist}
+              onGenerate={handleGenerate}
+              isGenerating={isGenerating}
+              disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0 && preferences.decades.length === 0 && !preferences.audioFeatures}
+              onRemoveTrack={handleRemoveTrack}
+              onToggleFavorite={toggleFavorite}
+              favorites={favorites}
+              onAddMore={handleAddMore}
+              onClear={handleResetPlaylist} 
+              onTrackClick={handleTrackClick}
+            />
+          </div>
         </div>
-
-        {/* Playlist Generada */}
-        <div>
-          <PlaylistDisplay 
-            playlist={playlist}
-            onGenerate={handleGenerate}
-            isGenerating={isGenerating}
-            disabled={preferences.artists.length === 0 && preferences.genres.length === 0 && preferences.tracks.length === 0 && preferences.decades.length === 0 && !preferences.audioFeatures}
-            onRemoveTrack={handleRemoveTrack}
-            onToggleFavorite={toggleFavorite}
-            favorites={favorites}
-            onAddMore={handleAddMore}
-            onClear={handleResetPlaylist} 
-            onTrackClick={handleTrackClick}
-          />
-        </div>
-
       </div>
 
       ) : (
 
-        <Favorites
+        <Favorites 
+          className="flex-1 overflow-y-auto p-6"
           favorites={favorites} 
           onToggleFavorite={toggleFavorite} 
           onTrackClick={handleTrackClick}
